@@ -1,0 +1,239 @@
+package application;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.SimpleFormatter;
+import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
+
+import backenddev.*;
+import javafx.animation.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
+import javafx.util.Duration;
+
+public class MainSceneController {
+	public static ObservableList<Button> listOfButtons = FXCollections.observableArrayList();
+	public static ObservableList<Button> listOfCTButtons = FXCollections.observableArrayList();
+	public volatile static int counter = 0;
+	public static ObservableList<Button>  listOfPTButtons = FXCollections.observableArrayList();
+	public static ArrayList<Vehicle> vehiclesOnTerminals = new ArrayList<Vehicle>();
+	public static volatile int firstPoliceTerminal = 1;// works if 1
+	public static volatile int secondPoliceTerminal = 1;//works if 1
+	public static volatile boolean isPaused = false;
+	public static CountDownLatch cdl = new CountDownLatch(50);//stop timer after 50 vehicles has been processed
+	@FXML
+	public Pane terminalPane;
+	@FXML
+	public Pane pane1;
+	@FXML 
+	public Pane pane2;
+	@FXML
+	public Pane pane3;
+	@FXML
+	public Button getScene2;
+	@FXML
+	public Button ct1;
+	@FXML
+	public Button ct2;
+	@FXML
+	public Button pause;
+	@FXML
+	public Button start;
+	@FXML
+	public Button pt1;
+	@FXML
+	public Label label;
+	@FXML
+	public Button pt2;
+	public static Timeline timeline;
+	@FXML
+	public Button pt3;
+	@FXML
+	public int pane3X = 0;
+	@FXML
+	public int pane3Y = 0;
+	@FXML
+	public Button getScene1;
+	public long elapsedTime=0;
+	@FXML
+	public static long startTime;
+	public MainSceneController() {
+	}
+	@FXML
+	public static synchronized void updateButtonNames() {
+		counter = 0;
+		while (counter < listOfButtons.size() - 1) {
+		    listOfButtons.get(counter).setText(listOfButtons.get(counter + 1).getText());
+		    counter++;
+		}
+		if (!listOfButtons.isEmpty()) {
+		    listOfButtons.remove(counter);
+		}
+	}
+	@FXML
+	public void init() {
+		timeline = new Timeline(new KeyFrame(Duration.seconds(0.01), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                elapsedTime+=(System.currentTimeMillis() - startTime);
+                startTime = System.currentTimeMillis();
+                label.setText("Elapsed Time: " + (elapsedTime/1000.0) + "s");
+            }
+        }));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+		int y = 0;
+		int i = 0;
+		for(i =0;i<5;i++) {
+			final int currentIndex = i;
+			Button b = new Button(Border.line.get(i).name);
+			b.setOnAction(event -> {
+	            Alert alert = new Alert(AlertType.INFORMATION);
+	            alert.setTitle("Information Dialog");
+	            alert.setHeaderText(null);
+	            String vehicleInfo = Border.line.get(currentIndex+1).name + "\n";
+	            vehicleInfo+=Border.line.get(currentIndex+1).numOfPassengers + "\n";
+	            for (Person p : Border.line.get(currentIndex+1).passengers) vehicleInfo += (p.GetId() + "\n");
+ 	            alert.setContentText(vehicleInfo);
+	            alert.showAndWait();
+	        });
+			listOfButtons.add(b);
+	        b.setLayoutX(100);
+			b.setLayoutY(y);
+			y+=50;
+			pane1.getChildren().add(b);
+		}
+		int x= 0;
+		while(i<28) {
+			final int currentIndex = i;
+			Button b = new Button(Border.line.get(i).name);
+			b.setOnAction(event -> {
+	            Alert alert = new Alert(AlertType.INFORMATION);
+	            alert.setTitle("Information Dialog");
+	            alert.setHeaderText(null);
+	            String vehicleInfo = Border.line.get(currentIndex+1).name + "\n";
+	            vehicleInfo+=Border.line.get(currentIndex+1).numOfPassengers + "\n";
+	            for (Person p : Border.line.get(currentIndex+1).passengers) vehicleInfo += (p.GetId() + "\n");
+ 	            alert.setContentText(vehicleInfo);
+	            alert.showAndWait();
+	        });	
+			listOfButtons.add(b);
+			b.setLayoutX(x+=60);
+			b.setLayoutY(10);
+			pane2.getChildren().add(b);
+			i++;
+		}
+		y= 0;
+		x=0;
+		while(i<50) {
+			final int currentIndex = i;
+			Button b = new Button(Border.line.get(i).name);
+			b.setOnAction(event -> {
+	            Alert alert = new Alert(AlertType.INFORMATION);
+	            alert.setTitle("Information Dialog");
+	            alert.setHeaderText(null);
+	            String vehicleInfo = Border.line.get(currentIndex+1).name + "\n";
+	            vehicleInfo+=Border.line.get(currentIndex+1).numOfPassengers + "\n";
+	            for (Person p : Border.line.get(currentIndex+1).passengers) vehicleInfo += (p.GetId() + "\n");
+ 	            alert.setContentText(vehicleInfo);
+	            alert.showAndWait();
+	        });
+			listOfButtons.add(b);
+			b.setLayoutX(x+=60);
+			b.setLayoutY(50);
+			pane2.getChildren().add(b);
+			i++;
+		}
+		listOfCTButtons.add(ct1);
+		listOfCTButtons.add(ct2);
+		listOfPTButtons.add(pt1);
+		listOfPTButtons.add(pt2);
+		listOfPTButtons.add(pt3);
+		pause.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				if(isPaused == false) {
+					isPaused = true;
+					timeline.stop();
+				}
+			}
+		});
+		start.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				if(isPaused == true) {
+					isPaused = false;
+					startTime = System.currentTimeMillis();
+					timeline.play();
+				}
+			}
+		});
+	}
+	public static void checkIfPaused() {
+		while(MainSceneController.isPaused == true) {
+			try {
+				FileHandler fileHandler = new FileHandler("error.log");
+	            SimpleFormatter simpleFormatter = new SimpleFormatter();
+	            fileHandler.setFormatter(simpleFormatter);
+	            ExceptionHandler.logger.addHandler(fileHandler);
+	            fileHandler.close();
+				Thread.sleep(100);
+			} catch (Exception e) {
+				ExceptionHandler.logger.log(Level.SEVERE,e.fillInStackTrace().toString(), e);
+			}
+			if(MainSceneController.isPaused == false) break;
+		}
+		
+	}
+	public static void setCT4V(Vehicle v) {
+		// TODO Auto-generated method stub
+		listOfCTButtons.get(0).setText(v.name);
+	}
+	public static void setCT4T() {
+		// TODO Auto-generated method stub
+		listOfCTButtons.get(1).setText("Truck");
+	}
+	public static void resetCT4T() {
+		listOfCTButtons.get(1).setText("CT2");
+	}
+	public static void resetCT4V() {
+		listOfCTButtons.get(0).setText("CT1");
+	}
+	public static void setPT4V(String s) {
+		if(MainSceneController.firstPoliceTerminal == 1) {
+			listOfPTButtons.get(0).setText(s);
+			System.out.println("USAO U SETOVANJE PRVOG TERMINALA");	
+			MainSceneController.firstPoliceTerminal = 0;			
+		}
+		else {
+			MainSceneController.secondPoliceTerminal = 0;
+			System.out.println("USAO U SETOVANJE DRUGOG TERMINALA");
+			listOfPTButtons.get(1).setText(s);
+		}
+	}
+	public static void setPT4T() {
+		listOfPTButtons.get(2).setText("Truck");
+	}
+	public static void resetPT4V() {
+		System.out.println(MainSceneController.firstPoliceTerminal);
+		System.out.println(MainSceneController.secondPoliceTerminal);
+		if(MainSceneController.firstPoliceTerminal == 0) {
+			System.out.println("POKUSAVA RESETOVATI PT1");
+			listOfPTButtons.get(0).setText("PT1");
+		} 
+		else {
+			System.out.println("POKUSAVA RESETOVATI PT2");
+			listOfPTButtons.get(1).setText("PT2");
+		}
+		MainSceneController.secondPoliceTerminal = 0;
+	}
+	public static void resetPT4T() {
+		listOfPTButtons.get(2).setText("PT3");
+	}
+}

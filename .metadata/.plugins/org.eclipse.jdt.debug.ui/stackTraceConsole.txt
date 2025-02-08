@@ -1,0 +1,3 @@
+synchronized(MainSceneController.listOfButtons) {
+				Platform.runLater(()->MainSceneController.updateButtonNames());
+			}

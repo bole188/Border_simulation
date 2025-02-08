@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="742.0" prefWidth="893.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainSceneController">
+   <children>
+      <Pane fx:id="pane3" layoutX="14.0" layoutY="19.0" prefHeight="118.0" prefWidth="847.0">
+         <children>
+            <Button fx:id="pause" layoutX="356.0" layoutY="22.0" mnemonicParsing="false" text="pause" />
+            <Label fx:id="label" layoutX="205.0" layoutY="51.0" text="label" />
+            <Button fx:id="getScene2" layoutX="380.0" layoutY="79.0" mnemonicParsing="false" text="go to scene 2" />
+            <Button fx:id="start" layoutX="448.0" layoutY="23.0" mnemonicParsing="false" text="start" />
+         </children></Pane>
+      <Pane fx:id="pane2" layoutX="11.0" layoutY="526.0" prefHeight="150.0" prefWidth="869.0" />
+      <Pane fx:id="pane1" layoutX="329.0" layoutY="286.0" prefHeight="220.0" prefWidth="235.0" />
+      <Pane fx:id="terminalPane" layoutX="348.0" layoutY="127.0" prefHeight="130.0" prefWidth="178.0">
+         <children>
+            <Button fx:id="ct1" layoutX="42.0" layoutY="28.0" mnemonicParsing="false" text="CT1" />
+            <Button fx:id="ct2" layoutX="131.0" layoutY="28.0" mnemonicParsing="false" text="CT2" />
+            <Button fx:id="pt1" layoutX="14.0" layoutY="94.0" mnemonicParsing="false" text="PT1" />
+            <Button fx:id="pt2" layoutX="71.0" layoutY="94.0" mnemonicParsing="false" text="PT2" />
+            <Button fx:id="pt3" layoutX="131.0" layoutY="94.0" mnemonicParsing="false" text="PT3" />
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
